@@ -2,4 +2,4 @@
 **/obj/**
 *.idea
 *.user
-/perf/Tvans.Kenteken.PerformanceTests/BenchmarkDotNet.Artifacts/
+**/BenchmarkDotNet.Artifacts/**

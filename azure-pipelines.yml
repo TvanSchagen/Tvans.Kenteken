@@ -11,5 +11,11 @@ variables:
 
 steps:
 - task: DotNetCoreCLI@2
+  displayName: Build 
   inputs:
     command: 'build'
+
+- task: DotNetCoreCLI@2
+  displayName: Test
+  inputs:
+    command: 'test'
