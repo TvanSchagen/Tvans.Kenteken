@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tvans.Kenteken", "src\Tvans
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tvans.Kenteken.FunctionalTests", "test\Tvans.Kenteken.FunctionalTests.csproj", "{8CDD8387-B905-44A8-B5D5-07BB50E05BEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tvans.Kenteken.PerformanceTests", "perf\Tvans.Kenteken.PerformanceTests\Tvans.Kenteken.PerformanceTests.csproj", "{AF87DE70-1AB2-4911-A64B-8D6B56D19323}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tvans.Kenteken.PerformanceTests", "perf\Tvans.Kenteken.PerformanceTests.csproj", "{AF87DE70-1AB2-4911-A64B-8D6B56D19323}"
 EndProject
 
 Global
