@@ -13,6 +13,7 @@ public sealed class Kenteken : IEquatable<Kenteken>
     private static readonly (int Sidecode, string Regex)[] Sidecodes =
     {
         new(1, "([GHJKLNPRSTXZ]{2})-?([0-9]{2})-?([0-9]{2})")
+        //@TODO: add all other sidecode regex here
     };
 
     public Kenteken(string input)
