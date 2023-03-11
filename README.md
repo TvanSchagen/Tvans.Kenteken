@@ -1,4 +1,4 @@
-﻿# TVans.Kenteken
+﻿# Tvans.Kenteken
 
 [![Build Status](https://dev.azure.com/teunvanschagen/Tvans.Kenteken/_apis/build/status/TvanSchagen.Tvans.Kenteken?branchName=main)](https://dev.azure.com/teunvanschagen/Tvans.Kenteken/_build/latest?definitionId=3&branchName=main)
 
