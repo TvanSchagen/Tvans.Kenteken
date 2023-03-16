@@ -23,7 +23,7 @@ steps:
 - task: Bash@3
   inputs:
     targetType: 'inline'
-    script: 'cd perf'
+    script: 'pwd && cd perf && pwd'
 
 - task: DotNetCoreCLI@2
   displayName: Performance
