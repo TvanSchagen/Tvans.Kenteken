@@ -78,10 +78,13 @@ public class KentekenTests
         (kenteken1 == kenteken2).ShouldBe(true);
     }
 
-    [Fact]
-    public void Try_parse_will_not_throw_on_invalid_format()
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("invalid")]
+    public void Try_parse_will_not_throw_on_invalid_format(string? input)
     {
-        var parsed = Kenteken.TryParse("", out var kenteken);
+        var parsed = Kenteken.TryParse(input, out var kenteken);
         
         parsed.ShouldBeFalse();
         kenteken.ShouldBeNull();

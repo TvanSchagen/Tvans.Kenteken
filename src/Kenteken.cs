@@ -41,9 +41,9 @@ public sealed class Kenteken : IEquatable<Kenteken>
         return false;
     }
 
-    public static Kenteken Parse(string input) => new Kenteken(input);
+    public static Kenteken Parse(string input) => new(input);
 
-    public static bool Validate(string input) => Formats.GetSidecode(input) is not null;
+    public static bool Validate(string input) => input is not null && Formats.GetSidecode(input) is not null;
 
     public static int GetSidecode(string input) => Formats.GetSidecode(input) ?? throw new FormatException("Invalid format");
 
