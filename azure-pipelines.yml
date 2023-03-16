@@ -21,6 +21,7 @@ steps:
     command: 'test'
 
 - task: Bash@3
+  continueOnError: true
   inputs:
     targetType: 'inline'
     script: 'pwd && cd perf && pwd'
@@ -28,4 +29,5 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: Performance
   inputs:
-    command: 'run -c Release'
+    command: 'run'
+    configuration: 'Release'
