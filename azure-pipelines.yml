@@ -11,17 +11,20 @@ variables:
 
 steps:
 - task: DotNetCoreCLI@2
-  displayName: Build 
+  displayName: 'Build - $(BuildConfiguration)'
   inputs:
     command: 'build'
+    arguments: '--configuration $(BuildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  displayName: Test
+  displayName: 'Functional tests - $(BuildConfiguration)'
   inputs:
     command: 'test'
+    arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage"'
 
 - task: DotNetCoreCLI@2
-  displayName: Performance
+  displayName: 'Performance tests - $(BuildConfiguration)'
   inputs:
     workingDirectory: '$(System.DefaultWorkingDirectory)/perf'
     command: 'run'
+    arguments: '--configuration $(BuildConfiguration)'
