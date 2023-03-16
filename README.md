@@ -15,8 +15,8 @@ All non-`try` functions will throw a `FormatException` on an invalid format.
 var kenteken = new Kenteken("55-GJ-GJ");
 
 // instance properties
-int sidecode = new Kenteken("55-GJ-GJ").Sidecode;
-string formatted = new Kenteken("55gjgj").Formatted;
+int sidecode = new Kenteken("55-GJ-GJ").Sidecode;       // 1
+string formatted = new Kenteken("55gjgj").Formatted;    // 55-GJ-GJ
 
 // static functions
 bool valid = Kenteken.Validate("55-GJ-GJ");
