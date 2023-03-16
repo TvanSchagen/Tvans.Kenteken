@@ -22,7 +22,7 @@ steps:
 
 - task: DotNetCoreCLI@2
   displayName: Performance
-  workingDirectory: '$(System.DefaultWorkingDirectory)/perf'
   inputs:
+    workingDirectory: '$(System.DefaultWorkingDirectory)/perf'
     command: 'run'
     configuration: 'Release'
