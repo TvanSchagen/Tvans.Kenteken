@@ -28,4 +28,4 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: Performance
   inputs:
-    command: 'dotnet run -c Release'
+    command: 'run -c Release'
