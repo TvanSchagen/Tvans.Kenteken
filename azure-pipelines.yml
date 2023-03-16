@@ -20,14 +20,9 @@ steps:
   inputs:
     command: 'test'
 
-- task: Bash@3
-  continueOnError: true
-  inputs:
-    targetType: 'inline'
-    script: 'pwd && cd perf && pwd'
-
 - task: DotNetCoreCLI@2
   displayName: Performance
+  workingDirectory: '$(System.DefaultWorkingDirectory)/perf'
   inputs:
     command: 'run'
     configuration: 'Release'
