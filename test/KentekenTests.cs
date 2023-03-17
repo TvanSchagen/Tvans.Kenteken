@@ -1,5 +1,6 @@
-using Shouldly;
+using FluentAssertions;
 using Xunit;
+using FluentAssertions.Execution;
 
 namespace Tvans.Kenteken.FunctionalTests;
 
@@ -32,7 +33,7 @@ public class KentekenTests
     [InlineData("999-XX-9", 14)]
     public void Returns_correct_sidecode(string kenteken, int expectedSidecode)
     {
-        Formats.GetSidecode(kenteken).ShouldBe(expectedSidecode);
+        Formats.GetSidecode(kenteken).Should().Be(expectedSidecode);
     }
 
     [Fact]
@@ -40,7 +41,7 @@ public class KentekenTests
     {
         var kenteken = new Kenteken("GJ-55-55");
 
-        kenteken.ShouldNotBeNull();
+        kenteken.Should().NotBeNull();
     }
     
     [Fact]
@@ -48,7 +49,7 @@ public class KentekenTests
     {
         var kenteken = "GJ-55-55".ToKenteken();
 
-        kenteken.ShouldNotBeNull();
+        kenteken.Should().NotBeNull();
     }
     
     [Theory]
@@ -57,7 +58,7 @@ public class KentekenTests
     {
         var output = new Kenteken(input).Formatted;
         
-        output.ShouldBe(expectedOutput);
+        output.Should().Be(expectedOutput);
     }
 
     [Fact]
@@ -65,7 +66,7 @@ public class KentekenTests
     {
         var output = new Kenteken("gj5555").ToString();
         
-        output.ShouldBe("GJ-55-55");
+        output.Should().Be("GJ-55-55");
     }
 
     [Fact]
@@ -74,8 +75,11 @@ public class KentekenTests
         var kenteken1 = new Kenteken("GJ-55-55");
         var kenteken2 = new Kenteken("gj5555");
 
-        kenteken1.Equals(kenteken2).ShouldBe(true);
-        (kenteken1 == kenteken2).ShouldBe(true);
+        using (new AssertionScope())
+        {
+            kenteken1.Equals(kenteken2).Should().BeTrue();
+            (kenteken1 == kenteken2).Should().BeTrue();
+        }
     }
 
     [Theory]
@@ -85,8 +89,11 @@ public class KentekenTests
     public void Try_parse_will_not_throw_on_invalid_format(string? input)
     {
         var parsed = Kenteken.TryParse(input, out var kenteken);
-        
-        parsed.ShouldBeFalse();
-        kenteken.ShouldBeNull();
+
+        using (new AssertionScope())
+        {
+            parsed.Should().BeFalse();
+            kenteken.Should().BeNull();
+        }
     }
 }
