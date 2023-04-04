@@ -45,6 +45,14 @@ public class KentekenTests
     }
     
     [Fact]
+    public void Can_parse()
+    {
+        var kenteken = Kenteken.Parse("GJ-55-55");
+        
+        kenteken.Should().NotBeNull();
+    }
+    
+    [Fact]
     public void Can_create_new_kenteken_using_extension_method()
     {
         var kenteken = "GJ-55-55".ToKenteken();

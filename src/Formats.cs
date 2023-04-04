@@ -30,18 +30,18 @@ public static class Formats
         new(14, $"([0-9]{{3}})-?(([{AllowedInSidecode10Onwards}]{{2}})?-[0-9]{{1}})"),                            // 999-XX-9
     };
     
-    private const string AllowedInSidecode1 = "ABDEFGHJKLMNOPRSTUVXZ";
-    private const string AllowedInSidecode2 = "ABDEFGHIJMNOPRSTUVXZ";
-    private const string AllowedInSidecode3 = "ABDEFGHIJMNOPRSTUVXYZ";
-    private const string AllowedInSidecode4 = "BDFGHJKLMNOPRSTVWXYZ";
-    private const string AllowedInSidecode5 = "BDFGHJLMNOPRSTVWXZ";
-    private const string AllowedInSidecode6 = "BDFGHJLMNOPRSTVWXZ";
-    private const string AllowedInSidecode7 = "BDFGHJKLMNOPRSTVWXZ";
-    private const string AllowedInSidecode8 = "BDFGHJKMNOPRSTVWXZ";
-    private const string AllowedInSidecode9 = "BDFGHJKMNOPRSTVWXZ";
-    private const string AllowedInSidecode10Onwards = "BDFGHJKLMNOPRSTVWXZ";
+    private const string AllowedInSidecode1 =           "ABDEFGHJKLMNOPRSTUVXZ";
+    private const string AllowedInSidecode2 =           "ABDEFGHIJMNOPRSTUVXZ";
+    private const string AllowedInSidecode3 =           "ABDEFGHIJMNOPRSTUVXYZ";
+    private const string AllowedInSidecode4 =           "BDFGHJKLMNOPRSTVWXYZ";
+    private const string AllowedInSidecode5 =           "BDFGHJLMNOPRSTVWXZ";
+    private const string AllowedInSidecode6 =           "BDFGHJLMNOPRSTVWXZ";
+    private const string AllowedInSidecode7 =           "BDFGHJKLMNOPRSTVWXZ";
+    private const string AllowedInSidecode8 =           "BDFGHJKMNOPRSTVWXZ";
+    private const string AllowedInSidecode9 =           "BDFGHJKMNOPRSTVWXZ";
+    private const string AllowedInSidecode10Onwards =   "BDFGHJKLMNOPRSTVWXZ";
 
-    private static readonly string[] Disallowed = {"SD", "SS", "SA", "WA", "GVD", "KKK", "LPF", "NSB", "PKK", "PSV", "PVV", "SGP", "TBS"};
-    private static readonly string[] DisallowedFromSidecode8Onwards = Disallowed.Concat(new [] {"KVT, VVD"}).ToArray();
-    private static readonly string[] DisallowedFromSidecode13Onwards = DisallowedFromSidecode8Onwards.Concat(new [] {"SP"}).ToArray();
+    private static readonly string[] Disallowed = { "SD", "SS", "SA", "WA", "GVD", "KKK", "LPF", "NSB", "PKK", "PSV", "PVV", "SGP", "TBS" };
+    private static readonly string[] DisallowedFromSidecode8Onwards = Disallowed.Concat(new [] { "KVT, VVD" }).ToArray();
+    private static readonly string[] DisallowedFromSidecode13Onwards = DisallowedFromSidecode8Onwards.Concat(new [] { "SP" }).ToArray();
 }

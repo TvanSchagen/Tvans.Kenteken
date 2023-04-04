@@ -9,6 +9,8 @@ Allows parsing, formatting, and validating dutch license plates.
 
 All non-`try` functions will throw a `FormatException` on an invalid format.
 
+As of `2023-04-04`, some available sidecodes that this library considers valid, haven't been distributed yet.
+
 ## Usage
 ```csharp
 // create instance
@@ -26,4 +28,10 @@ Kenteken kenteken = Kenteken.Parse("55-GJ-GJ");
 
 // extension method
 Kenteken kenteken = "55-GJ-GJ".ToKenteken();
+
+// equality comparison
+var unformatted = new Kenteken("55gjgj");
+var formatted = new Kenteken("55-GJ-GJ");
+
+bool isEqual = formatted == unformatted;                // true
 ```

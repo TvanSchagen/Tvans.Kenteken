@@ -4,13 +4,24 @@ namespace Tvans.Kenteken;
 
 public sealed class Kenteken : IEquatable<Kenteken>
 {
+    /// <summary>
+    /// Contains the sidecode associated with the kenteken. This represents in what series it was distributed.
+    /// </summary>
     public int Sidecode { get; }
     
+    /// <summary>
+    /// Contains the formatted kenteken, meaning uppercase with hyphens.
+    /// </summary>
     public string Formatted { get; }
     
+    /// <summary>
+    /// Creates a new instance of a Kenteken.
+    /// </summary>
+    /// <param name="input">A string containing the Kenteken to parse.</param>
+    /// <exception cref="T:System.FormatException">When the Kenteken is invalid.</exception>
     public Kenteken(string input)
     {
-        Sidecode =  GetSidecode(input);
+        Sidecode = GetSidecode(input);
         Formatted = Format(input);
     }
 
@@ -29,6 +40,12 @@ public sealed class Kenteken : IEquatable<Kenteken>
             .ToUpperInvariant();
     }
 
+    /// <summary>
+    /// Converts the string representation of the Kenteken to a Kenteken equivalent. A return value indicates whether the conversion succeeded.
+    /// </summary>
+    /// <param name="input">A string containing the Kenteken to parse.</param>
+    /// <param name="kenteken">Contains the Kenteken if parsing was successful, null otherwise.</param>
+    /// <returns>true if <paramref name="input">input</paramref> was converted successfully; otherwise, false.</returns>
     public static bool TryParse(string input, out Kenteken kenteken)
     {
         if (Validate(input))
@@ -36,15 +53,32 @@ public sealed class Kenteken : IEquatable<Kenteken>
             kenteken = new Kenteken(input);
             return true;
         }
-
+        
         kenteken = null;
         return false;
     }
+    
 
+    /// <summary>
+    /// Converts the string representation of the Kenteken to a Kenteken equivalent.
+    /// </summary>
+    /// <param name="input">A string containing the Kenteken to parse.</param>
+    /// <exception cref="T:System.FormatException">When the Kenteken is invalid.</exception>
     public static Kenteken Parse(string input) => new(input);
 
+    /// <summary>
+    /// Validates whether the input is a valid Kenteken.
+    /// </summary>
+    /// <param name="input">A string containing the Kenteken to parse.</param>
+    /// <returns>true if <paramref name="input">input</paramref> was converted successfully; otherwise, false.</returns>
     public static bool Validate(string input) => input is not null && Formats.GetSidecode(input) is not null;
 
+    /// <summary>
+    /// Gets the sidecode associated with a Kenteken.
+    /// </summary>
+    /// <param name="input">A string containing the Kenteken to get the sidecode for.</param>
+    /// <returns></returns>
+    /// <exception cref="T:System.FormatException">When the Kenteken is invalid.</exception>
     public static int GetSidecode(string input) => Formats.GetSidecode(input) ?? throw new FormatException("Invalid format");
 
     public override string ToString() => Formatted;
