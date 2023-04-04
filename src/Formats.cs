@@ -2,7 +2,7 @@
 
 namespace Tvans.Kenteken;
 
-public static class Formats
+internal static class Formats
 {
     public static int? GetSidecode(string input) => Sidecodes.FirstOrDefault(r => Regex.IsMatch(input, r.Regex, RegexOptions.IgnoreCase)) switch
     {

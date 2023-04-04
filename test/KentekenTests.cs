@@ -33,7 +33,7 @@ public class KentekenTests
     [InlineData("999-XX-9", 14)]
     public void Returns_correct_sidecode(string kenteken, int expectedSidecode)
     {
-        Formats.GetSidecode(kenteken).Should().Be(expectedSidecode);
+        Kenteken.GetSidecode(kenteken).Should().Be(expectedSidecode);
     }
 
     [Fact]
