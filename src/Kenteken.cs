@@ -58,7 +58,6 @@ public sealed class Kenteken : IEquatable<Kenteken>
         return false;
     }
     
-
     /// <summary>
     /// Converts the string representation of the Kenteken to a Kenteken equivalent.
     /// </summary>
