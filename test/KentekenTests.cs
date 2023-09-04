@@ -11,9 +11,11 @@ public class KentekenTests
     [InlineData("gj-55-55")]
     [InlineData("GJ5555")]
     [InlineData("gj5555")]
-    public bool Is_a_valid_kenteken(string kenteken)
+    public void Is_a_valid_kenteken(string kenteken)
     {
-        return Kenteken.Validate(kenteken);
+        var valid = Kenteken.Validate(kenteken);
+        
+        valid.Should().BeTrue();
     }
 
     [Theory]
