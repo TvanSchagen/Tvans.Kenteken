@@ -7,6 +7,8 @@ internal static partial class Formats
     public static int? GetSidecode(ReadOnlySpan<char> input)
     {
         var sidecode = GetsidecodeFromRegex(input);
+        if (sidecode is null) return null;
+        
         if (sidecode >= 13)
         {
             if (ContainsDisallowedSequence(input, DisallowedFromSidecode13Onwards)) return null;
