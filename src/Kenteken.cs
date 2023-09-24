@@ -37,6 +37,13 @@ public sealed class Kenteken : IEquatable<Kenteken>
         Sidecode = GetSidecode(input);
         Formatted = Format(input);
     }
+    
+    // internal constructor for when the sidecode is already known
+    private Kenteken(ReadOnlySpan<char> input, int sidecode)
+    {
+        Sidecode = sidecode;
+        Formatted = Format(input);
+    }
 
     private string Format(ReadOnlySpan<char> input)
     {
@@ -83,7 +90,7 @@ public sealed class Kenteken : IEquatable<Kenteken>
         var sidecode = Formats.GetSidecode(input);
         if (sidecode is null) return false;
         
-        kenteken = new Kenteken(input);
+        kenteken = new Kenteken(input, sidecode.Value);
         return true;
     }
     
