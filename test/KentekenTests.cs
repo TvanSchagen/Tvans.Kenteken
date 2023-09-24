@@ -17,6 +17,26 @@ public class KentekenTests
         
         valid.Should().BeTrue();
     }
+    
+    [Theory]
+    [InlineData("SS-55-55")]
+    [InlineData("ss-55-55")]
+    [InlineData("SS5555")]
+    [InlineData("ss5555")]
+    [InlineData("6-VVD-86")]
+    [InlineData("6-vvd-86")]
+    [InlineData("6VVD86")]
+    [InlineData("6vvd86")]
+    [InlineData("9-SP-999")]
+    [InlineData("9-sp-999")]
+    [InlineData("9SP999")]
+    [InlineData("9sp999")]
+    public void Is_a_invalid_kenteken_because_it_contains_forbidden_combinations(string kenteken)
+    {
+        var valid = Kenteken.Validate(kenteken);
+        
+        valid.Should().BeFalse();
+    }
 
     [Theory]
     [InlineData("GJ-55-55", 1)]
