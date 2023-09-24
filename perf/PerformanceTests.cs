@@ -16,7 +16,7 @@ public class PerformanceTests
         "9-XXX-99",
         "XX-999-X",
         "X-999-XX",
-        "XXX-99-x",
+        "XXX-99-X",
         "X-99-XXX",
         "9-XX-999",
         "999-XX-9"
