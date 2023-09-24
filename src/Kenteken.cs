@@ -21,8 +21,10 @@ public sealed class Kenteken : IEquatable<Kenteken>
     /// <exception cref="T:System.FormatException">When the Kenteken is invalid.</exception>
     public Kenteken(string input)
     {
-        Sidecode = GetSidecode(input.AsSpan());
-        Formatted = Format(input);
+        var span = input.AsSpan();
+        
+        Sidecode = GetSidecode(span);
+        Formatted = Format(span);
     }
     
     /// <summary>
@@ -33,29 +35,42 @@ public sealed class Kenteken : IEquatable<Kenteken>
     public Kenteken(ReadOnlySpan<char> input)
     {
         Sidecode = GetSidecode(input);
-        
-        // Regex.Match does not exist for ReadOnlySpan<char>
-        Formatted = Format(input.ToString());
+        Formatted = Format(input);
     }
 
-    private string Format(string input)
+    private string Format(ReadOnlySpan<char> input)
     {
-        var sidecode = Formats.Sidecodes[Sidecode - 1];
+        var regex = Formats.Sidecodes[Sidecode - 1];
 
-        return Regex.Match(input, sidecode.Regex, RegexOptions.IgnoreCase)
-            // get the capture groups for the desired sidecode
-            .Groups
-            // use cast to filter nulls
-            .Cast<Group>()
-            // skip first capture because it's the whole thing
-            .Skip(1)
-            // use cast to filter nulls
-            .Cast<Capture>()
-            .Select(c => c.Value)
-            // add dashes between the capture group to create the formatted variant
-            .Aggregate(string.Empty, (a, b) => a.Length > 0 ? a + "-" + b : b)
-            // format should always be uppercase
-            .ToUpperInvariant();
+        var captures = Regex.Match(input.ToString(), regex, RegexOptions.IgnoreCase).Groups;
+
+        var result = new Span<char>(new char[8]);
+        var curLen = 0;
+        
+        for (var i = 1; i < captures.Count; i++)
+        {
+            var capture = captures[i];
+            var valueSpan = capture.ValueSpan;
+            if (i == 1)
+            {
+                for (var j = 0; j < capture.Length; j++)
+                {
+                    result[j] = char.ToUpperInvariant(valueSpan[j]);
+                }
+            }
+            else
+            {
+                result[curLen] = '-';
+                curLen++;
+                for (var j = 0; j < capture.Length; j++)
+                {
+                    result[curLen + j] = char.ToUpperInvariant(valueSpan[j]);
+                }
+            }
+            curLen += capture.Length;
+        }
+        
+        return result.ToString();
     }
 
     /// <summary>
@@ -64,17 +79,7 @@ public sealed class Kenteken : IEquatable<Kenteken>
     /// <param name="input">A string containing the Kenteken to parse.</param>
     /// <param name="kenteken">Contains the Kenteken if parsing was successful, null otherwise.</param>
     /// <returns>true if <paramref name="input">input</paramref> was converted successfully; otherwise, false.</returns>
-    public static bool TryParse(string input, out Kenteken kenteken)
-    {
-        if (Validate(input))
-        {
-            kenteken = new Kenteken(input);
-            return true;
-        }
-        
-        kenteken = null;
-        return false;
-    }
+    public static bool TryParse(string input, out Kenteken kenteken) => TryParse(input.AsSpan(), out kenteken);
     
     /// <summary>
     /// Converts the string representation of the Kenteken to a Kenteken equivalent. A return value indicates whether the conversion succeeded.
@@ -99,7 +104,7 @@ public sealed class Kenteken : IEquatable<Kenteken>
     /// </summary>
     /// <param name="input">A string containing the Kenteken to parse.</param>
     /// <exception cref="T:System.FormatException">When the Kenteken is invalid.</exception>
-    public static Kenteken Parse(string input) => new(input);
+    public static Kenteken Parse(string input) => new(input.AsSpan());
     
     /// <summary>
     /// Converts the string representation of the Kenteken to a Kenteken equivalent.
@@ -113,7 +118,7 @@ public sealed class Kenteken : IEquatable<Kenteken>
     /// </summary>
     /// <param name="input">A string containing the Kenteken to parse.</param>
     /// <returns>true if <paramref name="input">input</paramref> was converted successfully; otherwise, false.</returns>
-    public static bool Validate(string input) => !string.IsNullOrWhiteSpace(input) && Formats.GetSidecode(input) is not null;
+    public static bool Validate(string input) => Validate(input.AsSpan());
     
     /// <summary>
     /// Validates whether the input is a valid Kenteken.
@@ -128,7 +133,7 @@ public sealed class Kenteken : IEquatable<Kenteken>
     /// <param name="input">A string containing the Kenteken to get the sidecode for.</param>
     /// <returns>The sidecode</returns>
     /// <exception cref="T:System.FormatException">When the Kenteken is invalid.</exception>
-    public static int GetSidecode(string input) => Formats.GetSidecode(input) ?? throw new FormatException("Invalid format");
+    public static int GetSidecode(string input) => GetSidecode(input.AsSpan());
     
     /// <summary>
     /// Gets the sidecode associated with a Kenteken.
