@@ -31,7 +31,7 @@ public class KentekenTests
     [InlineData("9-sp-999")]
     [InlineData("9SP999")]
     [InlineData("9sp999")]
-    public void Is_a_invalid_kenteken_because_it_contains_forbidden_combinations(string kenteken)
+    public void Is_an_invalid_kenteken_because_it_contains_forbidden_combinations(string kenteken)
     {
         var valid = Kenteken.Validate(kenteken);
         
