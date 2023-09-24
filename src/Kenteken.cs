@@ -43,18 +43,18 @@ public sealed class Kenteken : IEquatable<Kenteken>
         var regex = Formats.Sidecodes[Sidecode - 1];
         var captures = Regex.Match(input.ToString(), regex, RegexOptions.IgnoreCase).Groups;
         var result = new Span<char>(new char[8]);
-        var curLen = 0;
-        
-        captures[1].ValueSpan.ToUpperInvariant(destination: result.Slice(0, captures[1].ValueSpan.Length));
-        curLen = captures[1].ValueSpan.Length;
+
+        // skip first capture because it contains the whole regex
+        captures[1].ValueSpan.ToUpperInvariant(destination: result.Slice(0, captures[1].Length));
+        var currentLength = captures[1].ValueSpan.Length;
         
         for (var i = 2; i < captures.Count; i++)
         {
             var capture = captures[i];
             var valueSpan = capture.ValueSpan;
-            result[curLen] = '-';
-            valueSpan.ToUpperInvariant(destination: result.Slice(curLen + 1, capture.Length));
-            curLen += capture.Length + 1;
+            result[currentLength] = '-';
+            valueSpan.ToUpperInvariant(destination: result.Slice(currentLength + 1, capture.Length));
+            currentLength += capture.Length + 1;
         }
         
         return result.ToString();
