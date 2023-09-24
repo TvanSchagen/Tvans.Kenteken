@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <IsPackable>true</IsPackable>
-        <TargetFramework>netstandard2.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <LangVersion>latest</LangVersion>
         <Version>1.0.1</Version>
@@ -20,6 +19,7 @@
         <AssemblyVersion>1.0.1</AssemblyVersion>
         <FileVersion>1.0.1</FileVersion>
         <PackageVersion>1.0.1</PackageVersion>
+        <TargetFramework>net7.0</TargetFramework>
     </PropertyGroup>
     
     <ItemGroup>

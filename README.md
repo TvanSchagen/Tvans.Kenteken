@@ -11,6 +11,8 @@ All non-`try` functions will throw a `FormatException` on an invalid format.
 
 As of `2023-04-04`, some available sidecodes that this library considers valid, haven't been distributed yet.
 
+For maximum performance and minimum memory requirements, use the `ReadOnlySpan<char>` overloads.
+
 ## Usage
 ```csharp
 // create instance
