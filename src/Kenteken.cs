@@ -41,33 +41,20 @@ public sealed class Kenteken : IEquatable<Kenteken>
     private string Format(ReadOnlySpan<char> input)
     {
         var regex = Formats.Sidecodes[Sidecode - 1];
-
         var captures = Regex.Match(input.ToString(), regex, RegexOptions.IgnoreCase).Groups;
-
         var result = new Span<char>(new char[8]);
         var curLen = 0;
         
-        for (var i = 1; i < captures.Count; i++)
+        captures[1].ValueSpan.ToUpperInvariant(destination: result.Slice(0, captures[1].ValueSpan.Length));
+        curLen = captures[1].ValueSpan.Length;
+        
+        for (var i = 2; i < captures.Count; i++)
         {
             var capture = captures[i];
             var valueSpan = capture.ValueSpan;
-            if (i == 1)
-            {
-                for (var j = 0; j < capture.Length; j++)
-                {
-                    result[j] = char.ToUpperInvariant(valueSpan[j]);
-                }
-            }
-            else
-            {
-                result[curLen] = '-';
-                curLen++;
-                for (var j = 0; j < capture.Length; j++)
-                {
-                    result[curLen + j] = char.ToUpperInvariant(valueSpan[j]);
-                }
-            }
-            curLen += capture.Length;
+            result[curLen] = '-';
+            valueSpan.ToUpperInvariant(destination: result.Slice(curLen + 1, capture.Length));
+            curLen += capture.Length + 1;
         }
         
         return result.ToString();
@@ -89,14 +76,15 @@ public sealed class Kenteken : IEquatable<Kenteken>
     /// <returns>true if <paramref name="input">input</paramref> was converted successfully; otherwise, false.</returns>
     public static bool TryParse(ReadOnlySpan<char> input, out Kenteken kenteken)
     {
-        if (Validate(input))
-        {
-            kenteken = new Kenteken(input);
-            return true;
-        }
-        
         kenteken = null;
-        return false;
+        
+        if (input.IsEmpty || input.IsWhiteSpace()) return false;
+
+        var sidecode = Formats.GetSidecode(input);
+        if (sidecode is null) return false;
+        
+        kenteken = new Kenteken(input);
+        return true;
     }
     
     /// <summary>
