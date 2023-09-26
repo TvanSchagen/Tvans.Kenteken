@@ -21,7 +21,7 @@ public class PerformanceTests
         "9-XX-999",
         "999-XX-9"
     )]
-    public string Input { get; set; }
+    public string Input { get; set; } = default!;
     
     [Benchmark]
     public int? GetSidecode()
