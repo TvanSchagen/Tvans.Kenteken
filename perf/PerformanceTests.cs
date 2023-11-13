@@ -5,33 +5,18 @@ namespace Tvans.Kenteken.PerformanceTests;
 [MemoryDiagnoser]
 public class PerformanceTests
 {
+    [Params("99-XX-XX", "99-99-XX", "99-XX-99")]
+    public string Input { get; set; } = default!;
+    
     [Benchmark]
     public int? GetSidecode()
     {
-        return Kenteken.GetSidecode("55-GJ-GJ");
-    }
-    
-    [Benchmark]
-    public bool Validate()
-    {
-        return Kenteken.Validate("55-GJ-GJ");
-    }
-
-    [Benchmark]
-    public string Format()
-    {
-        return new Kenteken("55GJGJ").Formatted;
+        return Kenteken.GetSidecode(Input);
     }
     
     [Benchmark]
     public Kenteken New()
     {
-        return new Kenteken("55-GJ-GJ");
-    }
-    
-    [Benchmark]
-    public bool TryParse()
-    {
-        return Kenteken.TryParse("55-GJ-GJ", out _);
+        return new Kenteken(Input);
     }
 }

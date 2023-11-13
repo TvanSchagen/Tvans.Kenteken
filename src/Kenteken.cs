@@ -21,23 +21,50 @@ public sealed class Kenteken : IEquatable<Kenteken>
     /// <exception cref="T:System.FormatException">When the Kenteken is invalid.</exception>
     public Kenteken(string input)
     {
+        var span = input.AsSpan();
+        
+        Sidecode = GetSidecode(span);
+        Formatted = Format(span);
+    }
+    
+    /// <summary>
+    /// Creates a new instance of a Kenteken.
+    /// </summary>
+    /// <param name="input">A string containing the Kenteken to parse.</param>
+    /// <exception cref="T:System.FormatException">When the Kenteken is invalid.</exception>
+    public Kenteken(ReadOnlySpan<char> input)
+    {
         Sidecode = GetSidecode(input);
         Formatted = Format(input);
     }
-
-    private string Format(string input)
+    
+    // internal constructor for when the sidecode is already known
+    private Kenteken(ReadOnlySpan<char> input, int sidecode)
     {
-        var sidecode = Formats.Sidecodes
-            .Single(r => r.Sidecode == Sidecode);
+        Sidecode = sidecode;
+        Formatted = Format(input);
+    }
 
-        return Regex.Match(input, sidecode.Regex, RegexOptions.IgnoreCase)
-            .Groups
-            .Cast<Group>()
-            .Skip(1)
-            .Cast<Capture>()
-            .Select(c => c.Value)
-            .Aggregate(string.Empty, (a, b) => a.Length > 0 ? a + "-" + b : b)
-            .ToUpperInvariant();
+    private string Format(ReadOnlySpan<char> input)
+    {
+        var regex = Formats.Sidecodes[Sidecode - 1];
+        var captures = Regex.Match(input.ToString(), regex, RegexOptions.IgnoreCase).Groups;
+        var result = new Span<char>(new char[8]);
+
+        // skip first capture because it contains the whole regex
+        captures[1].ValueSpan.ToUpperInvariant(destination: result.Slice(0, captures[1].Length));
+        var currentLength = captures[1].ValueSpan.Length;
+        
+        for (var i = 2; i < captures.Count; i++)
+        {
+            var capture = captures[i];
+            var valueSpan = capture.ValueSpan;
+            result[currentLength] = '-';
+            valueSpan.ToUpperInvariant(destination: result.Slice(currentLength + 1, capture.Length));
+            currentLength += capture.Length + 1;
+        }
+        
+        return result.ToString();
     }
 
     /// <summary>
@@ -46,16 +73,25 @@ public sealed class Kenteken : IEquatable<Kenteken>
     /// <param name="input">A string containing the Kenteken to parse.</param>
     /// <param name="kenteken">Contains the Kenteken if parsing was successful, null otherwise.</param>
     /// <returns>true if <paramref name="input">input</paramref> was converted successfully; otherwise, false.</returns>
-    public static bool TryParse(string input, out Kenteken kenteken)
+    public static bool TryParse(string input, out Kenteken kenteken) => TryParse(input.AsSpan(), out kenteken);
+    
+    /// <summary>
+    /// Converts the string representation of the Kenteken to a Kenteken equivalent. A return value indicates whether the conversion succeeded.
+    /// </summary>
+    /// <param name="input">A string containing the Kenteken to parse.</param>
+    /// <param name="kenteken">Contains the Kenteken if parsing was successful, null otherwise.</param>
+    /// <returns>true if <paramref name="input">input</paramref> was converted successfully; otherwise, false.</returns>
+    public static bool TryParse(ReadOnlySpan<char> input, out Kenteken kenteken)
     {
-        if (Validate(input))
-        {
-            kenteken = new Kenteken(input);
-            return true;
-        }
-        
         kenteken = null;
-        return false;
+        
+        if (input.IsEmpty || input.IsWhiteSpace()) return false;
+
+        var sidecode = Formats.GetSidecode(input);
+        if (sidecode is null) return false;
+        
+        kenteken = new Kenteken(input, sidecode.Value);
+        return true;
     }
     
     /// <summary>
@@ -63,22 +99,44 @@ public sealed class Kenteken : IEquatable<Kenteken>
     /// </summary>
     /// <param name="input">A string containing the Kenteken to parse.</param>
     /// <exception cref="T:System.FormatException">When the Kenteken is invalid.</exception>
-    public static Kenteken Parse(string input) => new(input);
+    public static Kenteken Parse(string input) => new(input.AsSpan());
+    
+    /// <summary>
+    /// Converts the string representation of the Kenteken to a Kenteken equivalent.
+    /// </summary>
+    /// <param name="input">A string containing the Kenteken to parse.</param>
+    /// <exception cref="T:System.FormatException">When the Kenteken is invalid.</exception>
+    public static Kenteken Parse(ReadOnlySpan<char> input) => new(input);
 
     /// <summary>
     /// Validates whether the input is a valid Kenteken.
     /// </summary>
     /// <param name="input">A string containing the Kenteken to parse.</param>
     /// <returns>true if <paramref name="input">input</paramref> was converted successfully; otherwise, false.</returns>
-    public static bool Validate(string input) => input is not null && Formats.GetSidecode(input) is not null;
+    public static bool Validate(string input) => Validate(input.AsSpan());
+    
+    /// <summary>
+    /// Validates whether the input is a valid Kenteken.
+    /// </summary>
+    /// <param name="input">A string containing the Kenteken to parse.</param>
+    /// <returns>true if <paramref name="input">input</paramref> was converted successfully; otherwise, false.</returns>
+    public static bool Validate(ReadOnlySpan<char> input) => !input.IsEmpty && !input.IsWhiteSpace() && Formats.GetSidecode(input) is not null;
 
     /// <summary>
     /// Gets the sidecode associated with a Kenteken.
     /// </summary>
     /// <param name="input">A string containing the Kenteken to get the sidecode for.</param>
-    /// <returns></returns>
+    /// <returns>The sidecode</returns>
     /// <exception cref="T:System.FormatException">When the Kenteken is invalid.</exception>
-    public static int GetSidecode(string input) => Formats.GetSidecode(input) ?? throw new FormatException("Invalid format");
+    public static int GetSidecode(string input) => GetSidecode(input.AsSpan());
+    
+    /// <summary>
+    /// Gets the sidecode associated with a Kenteken.
+    /// </summary>
+    /// <param name="input">A string containing the Kenteken to get the sidecode for.</param>
+    /// <returns>The sidecode</returns>
+    /// <exception cref="T:System.FormatException">When the Kenteken is invalid.</exception>
+    public static int GetSidecode(ReadOnlySpan<char> input) => Formats.GetSidecode(input) ?? throw new FormatException("Invalid format");
 
     public override string ToString() => Formatted;
 
